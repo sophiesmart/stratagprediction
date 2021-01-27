@@ -91,6 +91,10 @@ pdf("stripplot_21092020.pdf")
 stripplot(imp100, pch = 20, cex = 1.2)
 dev.off()
 
+pdf("chainplot_21092020.pdf") 
+plot(imp100) 
+dev.off()
+
 #Checking single logistic regressions after imputation for the first five imputed datasets
 
 #The plot on the top left is a plot of the jackknife deviance residuals against the fitted values.
