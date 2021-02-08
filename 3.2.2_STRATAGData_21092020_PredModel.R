@@ -139,12 +139,14 @@ optimism.alpha.beta <- function (coef,data.imputed.Boot,data.imputed) {
   AUC.Optimism    <-  AUC.boot-AUC.data
   logOdds.data<-log(Predicted.data/(1-Predicted.data))
   logOdds.boot<-log(Predicted.boot/(1-Predicted.boot))
-  glm.coef.data       <-  glm(Outcome.data ~ logOdds.data,family=binomial)$coef
-  glm.coef.boot<-    glm(Outcome.boot ~ logOdds.boot,family=binomial)$coef
-  Alpha.data  <-  glm.coef.data[1]
-  Beta.data	 <-  glm.coef.data[2]
-  Alpha.boot  <-  glm.coef.boot[1]
-  Beta.boot	 <-  glm.coef.boot[2]
+  glm.coef.data.alpha       <-  glm(Outcome.data ~ offset(logOdds.data),family=binomial)$coef
+  glm.coef.boot.alpha<-    glm(Outcome.boot ~ offset(logOdds.boot),family=binomial)$coef
+  glm.coef.data.beta       <-  glm(Outcome.data ~ logOdds.data,family=binomial)$coef
+  glm.coef.boot.beta<-    glm(Outcome.boot ~ logOdds.boot,family=binomial)$coef
+  Alpha.data  <-  glm.coef.data.alpha[1]
+  Beta.data	 <-  glm.coef.data.beta[2]
+  Alpha.boot  <-  glm.coef.boot.alpha[1]
+  Beta.boot	 <-  glm.coef.boot.beta[2]
   Alpha.optimism  <-  Alpha.boot-Alpha.data
   Beta.optimism	 <-  Beta.boot-Beta.data
   
