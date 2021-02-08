@@ -76,11 +76,14 @@ AUC.alpha.beta <- function (coef,cohortstrata,Cv.row,data.imputed,f) {
     if(length(unique(Outcome.data[cohortstrata[-Cv.row[[f]]]==levels(cohortstrata)[i]]))>1){
       AUC[i]<-as.numeric(roc(Outcome.data[cohortstrata[-Cv.row[[f]]]==levels(cohortstrata)[i]], 
                              as.vector(Predicted.data[cohortstrata[-Cv.row[[f]]]==levels(cohortstrata)[i]]))$auc)
-      glm.coef.data       <-  glm(Outcome.data[cohortstrata[-Cv.row[[f]]]==levels(cohortstrata)[i]]~
+      glm.coef.data.beta       <-  glm(Outcome.data[cohortstrata[-Cv.row[[f]]]==levels(cohortstrata)[i]]~
                                     logOdds.data[cohortstrata[-Cv.row[[f]]]==levels(cohortstrata)[i]],
                                   family=binomial)$coef
-      Alpha[i] <-  glm.coef.data[1]
-      Beta[i] <-  glm.coef.data[2]
+      Beta[i] <-  glm.coef.data.beta[2]
+      glm.coef.data.alpha       <-  glm(Outcome.data[cohortstrata[-Cv.row[[f]]]==levels(cohortstrata)[i]]~
+                                    offset(logOdds.data[cohortstrata[-Cv.row[[f]]]==levels(cohortstrata)[i]]),
+                                  family=binomial)$coef
+      Alpha[i] <-  glm.coef.data.alpha[1]
     }
     i<-i+1
     
