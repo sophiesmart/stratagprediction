@@ -74,9 +74,10 @@ AUC.alpha.beta <- function (coef,data.imputed,Fit.Caret) {
   roc_obj <- roc(Outcome.data, as.vector(Predicted.data))
   AUC.apparent   <-as.numeric(roc_obj$auc)
   logOdds<-log(Predicted.data/(1-Predicted.data))
-  glm.coef       <-  glm(Outcome.data ~ logOdds,family=binomial)$coef
-  Alpha.apparent <-  glm.coef[1]
-  Beta.apparent	 <-  glm.coef[2]
+  glm.coef.beta      <-  glm(Outcome.data ~ logOdds,family=binomial)$coef
+  Beta.apparent	 <-  glm.coef.beta[2]
+  glm.coef.alpha    <- glm(Outcome.data ~ offset(logOdds),family=binomial)$coef
+  Alpha.apparent  <- glm.coef.alpha[1]
   if (!is.numeric(Fit.Caret)){
     y_predClass<-predict(Fit.Caret,type="raw",newdata=X.data)
     y_predProb<-predict(Fit.Caret,type="prob",newdata=X.data)
